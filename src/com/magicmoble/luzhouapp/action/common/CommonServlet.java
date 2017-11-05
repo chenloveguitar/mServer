@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import com.magicmoble.luzhouapp.business.CommonBusiness;
+import com.magicmoble.luzhouapp.business.FunctionBusiness;
 import com.magicmoble.luzhouapp.json.core.DataObject;
 import com.magicmoble.luzhouapp.json.core.ListObject;
 import com.magicmoble.luzhouapp.json.responseUtils.ResponseUtils;
@@ -23,6 +24,9 @@ import com.magicmoble.luzhouapp.json.status.StatusHouse;
 import com.magicmoble.luzhouapp.json.utils.JackJsonUtils;
 import com.magicmoble.luzhouapp.model.Admin_xinxi;
 import com.magicmoble.luzhouapp.model.FileManagement;
+import com.magicmoble.luzhouapp.model.Pinglun;
+import com.magicmoble.luzhouapp.model.server.Toutiao;
+import com.magicmoble.luzhouapp.server.server_function.Server_Function;
 
 @WebServlet("/CommonServlet")
 public class CommonServlet extends HttpServlet {
@@ -158,6 +162,21 @@ public class CommonServlet extends HttpServlet {
 				List<Integer> createdIds = commonBusiness.createImages(fileManagements);
 				DataObject dataObject = new DataObject();
 				dataObject.setdata(createdIds);
+				dataObject.setStatusObject(StatusHouse.COMMON_STATUS_OK);
+				String responseText = JackJsonUtils.toJson(dataObject);
+				ResponseUtils.renderJson(response, responseText);
+			}else if(type.equals("editMessage")){
+				String chaxun_id =  paramMap.get("chaxun_id");
+				String _Tag = paramMap.get("Tag");
+				_Tag = StringUtils.isNotBlank(_Tag)?_Tag:"0";
+				int Tag = Integer.parseInt(_Tag);
+				Toutiao detail = Server_Function.chaxun(chaxun_id, Tag);
+				List<Pinglun> comments = FunctionBusiness.getPinglun("1", detail.getId(), 0);
+				Map<String, Object> result = new HashMap<String,Object>();
+				result.put("detail", detail);//信息内容
+				result.put("comment", comments);//信息回复
+				DataObject dataObject = new DataObject();
+				dataObject.setdata(result);
 				dataObject.setStatusObject(StatusHouse.COMMON_STATUS_OK);
 				String responseText = JackJsonUtils.toJson(dataObject);
 				ResponseUtils.renderJson(response, responseText);
