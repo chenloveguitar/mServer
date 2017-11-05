@@ -1,0 +1,116 @@
+package com.magicmoble.luzhouapp.action.fabu;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.magicmoble.luzhouapp.business.CommodityBusiness;
+import com.magicmoble.luzhouapp.business.QuchuBusiness;
+import com.magicmoble.luzhouapp.json.core.DataObject;
+import com.magicmoble.luzhouapp.json.core.ListObject;
+import com.magicmoble.luzhouapp.json.responseUtils.ResponseUtils;
+import com.magicmoble.luzhouapp.json.status.StatusHouse;
+import com.magicmoble.luzhouapp.json.utils.JackJsonUtils;
+import com.magicmoble.luzhouapp.json.utils.UploadPicture;
+import com.magicmoble.luzhouapp.model.Quchu;
+
+public class Commodity_UpdateInq extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String str;
+		String picture = request.getParameter("picture");
+		try {
+
+			InputStream in = request.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			str = br.readLine();
+			Map<String, String> map = new HashMap<String, String>();
+			for (int i = 0; i < str.split("&").length; i++) {
+				map.put(str.split("&")[i].split("=")[0], str.split("&")[i].split("=")[1]);
+			}
+
+			if (picture != null) {
+				List<Map<String, String>> list2 = UploadPicture.upload(picture);
+				picture = "";
+				for (int i = 0; i < list2.size(); i++) {
+					String img_base64 = list2.get(i).get("base64");
+					String dataString = list2.get(i).get("name");
+					String path = request.getRealPath("/upload");
+					String ServicePath = path + "/" + dataString;
+					UploadPicture.GenerateImage(img_base64, ServicePath);
+					picture += "upload/" + dataString + ",";
+				}
+			}
+
+			for (int i = 0; i < map.size(); i++) {
+
+				if (str.split("&")[i].split("=")[0].equals("picture")) {
+					CommodityBusiness.UpdateCommodity(str.split("&")[i].split("=")[0], picture, map.get("id"));
+				} else {
+					CommodityBusiness.UpdateCommodity(str.split("&")[i].split("=")[0], str.split("&")[i].split("=")[1],
+							map.get("id"));
+				}
+			}
+			if (map.get("id") == null) {
+				DataObject dataObject = new DataObject();
+				dataObject.setdata("参数不足");
+				dataObject.setStatusObject(StatusHouse.COMMON_STATUS_ERROR);
+				String responseText = JackJsonUtils.toJson(dataObject);
+
+				ResponseUtils.renderJson(response, responseText);
+			} else {
+
+				DataObject dataObject = new DataObject();
+				dataObject.setdata("修改成功");
+				dataObject.setStatusObject(StatusHouse.COMMON_STATUS_OK);
+				String responseText = JackJsonUtils.toJson(dataObject);
+				ResponseUtils.renderJson(response, responseText);
+
+			}
+		} catch (NullPointerException e) {
+			DataObject dataObject = new DataObject();
+			dataObject.setdata("请传入正确参数");
+			dataObject.setStatusObject(StatusHouse.COMMON_STATUS_ERROR);
+			String responseText = JackJsonUtils.toJson(dataObject);
+
+			ResponseUtils.renderJson(response, responseText);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			DataObject dataObject = new DataObject();
+			dataObject.setdata("json参数错误");
+			dataObject.setStatusObject(StatusHouse.COMMON_STATUS_ERROR);
+			String responseText = JackJsonUtils.toJson(dataObject);
+
+			ResponseUtils.renderJson(response, responseText);
+		} catch (Exception e) {
+			DataObject dataObject = new DataObject();
+			dataObject.setdata("未知错误");
+			dataObject.setStatusObject(StatusHouse.COMMON_STATUS_ERROR);
+			String responseText = JackJsonUtils.toJson(dataObject);
+
+			ResponseUtils.renderJson(response, responseText);
+		}
+
+	}
+
+}

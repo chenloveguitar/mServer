@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//WebRoot/common/css/luzou.css=UTF-8
+encoding//WebRoot/page/Update.jsp=UTF-8
+encoding//src/com/magicmoble/luzhouapp/action/alipay/Ali_Pay.java=UTF-8
+encoding//src/com/magicmoble/luzhouapp/action/upload/FileUploadServlet.java=UTF-8
+encoding//src/com/magicmoble/luzhouapp/action/weixin_pay/Weixin_Pay.java=UTF-8
+encoding//src/com/magicmoble/luzhouapp/business/ShuoshuoBusiness.java=UTF-8
+encoding/<project>=UTF-8

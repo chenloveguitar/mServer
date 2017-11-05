@@ -1,0 +1,104 @@
+@charset "utf-8";
+/*样式参考*/
+a {
+    text-decoration: none;
+}
+
+#page {
+    height: 50px;
+    display: table;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
+.page {
+    text-align: center;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.pagingUl {
+    float: right;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    height: 30px;
+}
+
+.pagingUl li {
+    float: left;
+    width: 27px;
+    height: 27px;
+    background: #fff;
+    text-align: center;
+    margin-right: 10px;
+    border-radius: 5px;
+   
+}
+
+.pagingUl li a {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    line-height: 23px;
+    color: #666;
+    font-size: 12px;
+    border-radius: 2px;
+    border: 1px solid #cccccc;
+    background: #F2F2F2;
+}
+
+.prv,
+.next {
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    line-height: 23px;
+    cursor: pointer;
+    background: #fff;
+    padding: 0 ;
+    border-radius: 2px;
+    border: 1px solid #cccccc;
+    color: #666666;
+    background: #F2F2F2;
+}
+
+.prv {
+    margin-right: 10px;
+}
+
+.first,
+.last {
+    width: 25px;
+    height: 22px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 23px;
+    border: 1px solid #cccccc;
+    cursor: pointer;
+    background: #fff;
+    padding: 0 2px;
+    border-radius: 2px;
+    margin-right: 10px;
+    color: #666666;
+    background: #F2F2F2;
+}
+
+.prv:hover,
+.next:hover,
+.first:hover,
+.last:hover,
+.pagingUl li a:hover,
+.activP {
+    background-color: #00C8E8 !important;
+    color: #fff!important;
+    border:1px solid #00C8E8 !important;
+   
+}
